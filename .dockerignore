@@ -1,0 +1,6 @@
+.git/
+.github/
+base/
+.gitattributes
+LICENSE
+Makefile
