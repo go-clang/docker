@@ -6,6 +6,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG LLVM_VERSION
 RUN set -eux && \
 	apt-get update && \
+	if [ $LLVM_VERSION = '14' ]; then \
+		apt-get install -y --no-install-recommends \
+			ca-certificates \
+			gnupg \
+			wget && \
+		echo 'deb http://apt.llvm.org/impish/ llvm-toolchain-impish-14 main' | tee /etc/apt/sources.list.d/llvm.list && \
+		echo 'deb-src http://apt.llvm.org/impish/ llvm-toolchain-impish-14 main' | tee -a /etc/apt/sources.list.d/llvm.list && \
+		wget -q -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
+		apt-get update; \
+	fi && \
 	apt-get install -y --no-install-recommends \
 		ca-certificates \
 		git \
