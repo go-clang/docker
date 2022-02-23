@@ -10,7 +10,7 @@ gen/%:
 	cd $(shell go env GOPATH)/src/github.com/go-clang/clang-v$*; \
 		$(shell go env GOPATH)/src/github.com/go-clang/gen/go-clang-gen-$* -llvm-root=$(shell ${LLVM_CONFIG} --prefix)
 
-GOLANG_VERSION=1.17.3
+GOLANG_VERSION=1.17.7
 TARGET=llvm
 
 .PHONY: docker/build/4 docker/build/5 docker/build/6 docker/build/7 docker/build/8 docker/build/9 docker/build/10
