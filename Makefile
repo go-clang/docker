@@ -13,15 +13,20 @@ gen/%:
 GOLANG_VERSION=1.17.7
 TARGET=llvm
 
+DOCKER_FLAGS:=
+ifeq ($V,1)
+	DOCKER_FLAGS+=--progress=plain
+endif
+
 .PHONY: docker/build/4 docker/build/5 docker/build/6 docker/build/7 docker/build/8 docker/build/9 docker/build/10
 docker/build/4 docker/build/5 docker/build/6: UBUNTU_VERSION=18.04
 docker/build/7 docker/build/8 docker/build/9 docker/build/10: UBUNTU_VERSION=20.04
 docker/build/4 docker/build/5 docker/build/6 docker/build/7 docker/build/8 docker/build/9 docker/build/10:
-	docker image build --builder=default --rm --target=${TARGET} --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} --build-arg LLVM_VERSION=${@F} --build-arg GOLANG_VERSION=${GOLANG_VERSION} -t ghcr.io/go-clang/base:${@F} -f ./base/llvm-4-10.dockerfile ./base
+	docker image build --builder=default --rm ${DOCKER_FLAGS} --target=${TARGET} --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} --build-arg LLVM_VERSION=${@F} --build-arg GOLANG_VERSION=${GOLANG_VERSION} -t ghcr.io/go-clang/base:${@F} -f ./base/llvm-4-10.dockerfile ./base
 
 .PHONY: docker/build/11 docker/build/12 docker/build/13 docker/build/14
 docker/build/11 docker/build/12 docker/build/13 docker/build/14:
-	docker image build --builder=default --rm --target=${TARGET} --build-arg LLVM_VERSION=${@F} --build-arg GOLANG_VERSION=${GOLANG_VERSION} -t ghcr.io/go-clang/base:${@F} -f ./base/llvm-11-14.dockerfile ./base
+	docker image build --builder=default --rm ${DOCKER_FLAGS} --target=${TARGET} --build-arg LLVM_VERSION=${@F} --build-arg GOLANG_VERSION=${GOLANG_VERSION} -t ghcr.io/go-clang/base:${@F} -f ./base/llvm-11-14.dockerfile ./base
 
 docker/gen/%: TARGET=gen
 docker/gen/%: docker/build/%
