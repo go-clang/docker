@@ -10,7 +10,7 @@ gen/%:
 	cd $(shell go env GOPATH)/src/github.com/go-clang/clang-v$*; \
 		$(shell go env GOPATH)/src/github.com/go-clang/gen/go-clang-gen-$* -llvm-root=$(shell ${LLVM_CONFIG} --prefix)
 
-GOLANG_VERSION=1.17.7
+GOLANG_VERSION=1.18
 TARGET=llvm
 
 DOCKER_FLAGS:=
