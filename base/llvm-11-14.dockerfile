@@ -1,6 +1,6 @@
-# syntax=docker/dockerfile:1.3
+# syntax=docker/dockerfile:1.4
 
-FROM --platform=$BUILDPLATFORM ubuntu:21.10 AS apt
+FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS apt
 ENV DEBIAN_FRONTEND=noninteractive
 
 ARG LLVM_VERSION
@@ -11,8 +11,8 @@ RUN set -eux && \
 			ca-certificates \
 			gnupg \
 			wget && \
-		echo 'deb http://apt.llvm.org/impish/ llvm-toolchain-impish-14 main' | tee /etc/apt/sources.list.d/llvm.list && \
-		echo 'deb-src http://apt.llvm.org/impish/ llvm-toolchain-impish-14 main' | tee -a /etc/apt/sources.list.d/llvm.list && \
+		echo 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main' | tee /etc/apt/sources.list.d/llvm.list && \
+		echo 'deb-src http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main' | tee -a /etc/apt/sources.list.d/llvm.list && \
 		wget -q -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
 		apt-get update; \
 	fi && \
@@ -41,7 +41,7 @@ FROM --platform=$BUILDPLATFORM apt AS base
 ENV CC=/usr/bin/clang
 ENV CXX=/usr/bin/clang++
 
-FROM --platform=$BUILDPLATFORM ubuntu:21.10 AS golang
+FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS golang
 ARG GOLANG_VERSION
 RUN set -ex && \
 	apt-get update && \
