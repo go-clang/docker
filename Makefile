@@ -13,7 +13,7 @@ gen/%:
 GOLANG_VERSION=1.19
 TARGET=llvm
 
-DOCKER_FLAGS=--rm --pull
+DOCKER_FLAGS=--rm --pull --label=org.opencontainers.image.revision=$(shell git rev-parse --verify HEAD | cut -c -12)
 ifeq ($V,1)
 	DOCKER_FLAGS+=--progress=plain
 endif
