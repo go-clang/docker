@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.3
+# syntax=docker.io/docker/dockerfile-upstream:1.4
 
 ARG UBUNTU_VERSION
 
@@ -17,7 +17,7 @@ RUN set -eux && \
 	esac && \
 	\
 	apt-get update && \
-	apt-get install -y --no-install-recommends --no-install-suggests \
+	apt-get install -yqq --no-install-recommends --no-install-suggests \
 		ca-certificates \
 		git \
 		make \
@@ -53,12 +53,15 @@ RUN set -ex && \
 	curl -fsS "https://storage.googleapis.com/golang/go${GOLANG_VERSION}.linux-amd64.tar.gz" | tar -xzf - -C /usr/local
 
 FROM --platform=$BUILDPLATFORM base AS llvm
-COPY --from=golang /usr/local/go /usr/local/go
+COPY --link --from=golang --chmod=root:root /usr/local/go /usr/local/go
 ENV GOPATH=/go
 ENV PATH=${GOPATH}/bin:/usr/local/go/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
-LABEL org.opencontainers.image.authors   "The go-clang authors"
-LABEL org.opencontainers.image.url       "https://github.com/go-clang/docker"
-LABEL org.opencontainers.image.source    "https://github.com/go-clang/docker"
-LABEL org.opencontainers.image.licenses  "BSD-3-Clause"
+LABEL org.opencontainers.image.authors       "The go-clang authors"
+LABEL org.opencontainers.image.url           "https://github.com/go-clang/docker"
+LABEL org.opencontainers.image.source        "https://github.com/go-clang/docker/base/llvm-4-10.dockerfile"
+LABEL org.opencontainers.image.documentation "LLVM Clang container image"
+LABEL org.opencontainers.image.base.name     "ubuntu:${UBUNTU_VERSION}"
+LABEL org.opencontainers.image.version       "${LLVM_VERSION}"
+LABEL org.opencontainers.image.licenses      "BSD-3-Clause"
