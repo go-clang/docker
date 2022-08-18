@@ -13,17 +13,17 @@ gen/%:
 GOLANG_VERSION=1.19
 TARGET=llvm
 
-DOCKER_FLAGS=--rm
+DOCKER_FLAGS=--rm --pull
 ifeq ($V,1)
 	DOCKER_FLAGS+=--progress=plain
 endif
 
 define docker_build_4_10
-docker image build --builder=default $(strip ${DOCKER_FLAGS}) --target=${TARGET} --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} --build-arg LLVM_VERSION=${1} --build-arg GOLANG_VERSION=${GOLANG_VERSION} -t ghcr.io/go-clang/base:${2} -f ${3} ./base
+docker builder build $(strip ${DOCKER_FLAGS}) --target=${TARGET} --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} --build-arg LLVM_VERSION=${1} --build-arg GOLANG_VERSION=${GOLANG_VERSION} --output=type=docker -t ghcr.io/go-clang/base:${2} -f ${3} ./base
 endef
 
 define docker_build_11_14
-docker image build --builder=default $(strip ${DOCKER_FLAGS}) --target=${TARGET} --build-arg LLVM_VERSION=${1} --build-arg GOLANG_VERSION=${GOLANG_VERSION} -t ghcr.io/go-clang/base:${2} -f ${3} ./base
+docker builder build $(strip ${DOCKER_FLAGS}) --target=${TARGET} --build-arg LLVM_VERSION=${1} --build-arg GOLANG_VERSION=${GOLANG_VERSION} --output=type=docker -t ghcr.io/go-clang/base:${2} -f ${3} ./base
 endef
 
 .PHONY: docker/build/4.0.0
